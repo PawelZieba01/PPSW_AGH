@@ -1,4 +1,5 @@
 #include <LPC21xx.H>
+#define PIN_0_bm (1<<16)
 
 void Delay(unsigned int uiDelayMilliseconds) 															//ok 65 sekund chyba wystarczy - uint
 {
@@ -10,17 +11,17 @@ void Delay(unsigned int uiDelayMilliseconds) 															//ok 65 sekund chyba
 	}
 }
 
-
 int main()
 {
-	IO1DIR = IODIR1 | (1<<16);
+	IO1DIR = IODIR1 | PIN_0_bm;
 	
 	
 	while(1)
 	{
-		IO1SET = IO1SET | (1<<16);
-		Delay(1001);
-		IO1CLR = IO1CLR | (1<<16);
-		Delay(1001);
+		IO1SET = IO1SET | PIN_0_bm;
+		Delay(1000);
+		IO1CLR = IO1CLR | PIN_0_bm;
+		Delay(1000);
 	}
 }
+//4.7
