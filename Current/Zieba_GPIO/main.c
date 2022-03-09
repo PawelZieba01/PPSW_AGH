@@ -23,13 +23,14 @@ int main()
 {
 	IO1DIR = IODIR1 | LED3_bm;
 	
+	IO1SET = IO1SET | LED0_bm;
+	IO1SET = IO1SET | LED1_bm;
+	IO1SET = IO1SET | LED2_bm;
+	IO1SET = IO1SET | LED3_bm;
 	
 	while(1)
 	{
-		IO1SET = IO1SET | LED3_bm;
-		Delay(50);
-		IO1CLR = IO1CLR | LED3_bm;
-		Delay(50);
+		
 	}
 }
 //4.10
