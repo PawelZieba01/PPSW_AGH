@@ -2,9 +2,9 @@
 
 void Delay()
 {
-	unsigned int uiDelayCounter;
+	unsigned long int uliDelayCounter;
 	
-	for(uiDelayCounter = 0; uiDelayCounter < 1000; uiDelayCounter++){}
+	for(uliDelayCounter = 0; uliDelayCounter < 7500000; uliDelayCounter++){}
 }
 
 int main()
