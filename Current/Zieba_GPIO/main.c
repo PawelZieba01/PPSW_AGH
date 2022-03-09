@@ -11,6 +11,8 @@
 
 #define LEDx_bm(led_number) (1<<(16 + led_number))
 
+
+
 void Delay(unsigned int uiDelayMilliseconds) 															//ok 65 sekund chyba wystarczy - uint
 {
 	unsigned int uiDelayCounter;
@@ -21,22 +23,26 @@ void Delay(unsigned int uiDelayMilliseconds) 															//ok 65 sekund chyba
 	}
 }
 
+void LedInit()
+{
+	IO1DIR = IO1DIR | LED0_bm | LED1_bm | LED2_bm | LED3_bm;
+	IO1SET = IO1SET | LED0_bm;
+}
+
+
+
 int main()
 {
-	unsigned int ucLedNumber = 0;
+	unsigned char ucLedNumber = 0;
 	
-	IO1DIR = IODIR1 | LED0_bm;
-	IO1DIR = IODIR1 | LED1_bm;
-	IO1DIR = IODIR1 | LED2_bm;
-	IO1DIR = IODIR1 | LED3_bm;
+	LedInit();
 	
 	while(1)
 	{
 		IO1SET |= LEDx_bm(ucLedNumber % 4);
 		Delay(250);
 		IO1CLR |= LEDx_bm(ucLedNumber % 4);
-		ucLedNumber++;												//po przekroczeniu zakresu ucLedNumber jest ok
-		
+		ucLedNumber++;																													//po przekroczeniu zakresu ucLedNumber jest ok
 	}
 }
-//4.10
+//4.12
