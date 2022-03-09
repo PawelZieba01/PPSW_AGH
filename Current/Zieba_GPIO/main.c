@@ -1,11 +1,15 @@
 #include <LPC21xx.H>
 
-void Delay()
+void Delay(unsigned int uiDelayMilliseconds) 															//ok 65 sekund chyba wystarczy - uint
 {
-	unsigned long int uliDelayCounter;
+	unsigned int uiDelayCounter;
 	
-	for(uliDelayCounter = 0; uliDelayCounter < 7500000; uliDelayCounter++){}
+	for(; uiDelayMilliseconds > 0; uiDelayMilliseconds--)										//dwie petle bo mnozenie troche zajmuje
+	{
+			for(uiDelayCounter = 0; uiDelayCounter < 7500; uiDelayCounter++){}
+	}
 }
+
 
 int main()
 {
@@ -15,8 +19,8 @@ int main()
 	while(1)
 	{
 		IO1SET = IO1SET | (1<<16);
-		Delay();
+		Delay(1001);
 		IO1CLR = IO1CLR | (1<<16);
-		Delay();
+		Delay(1001);
 	}
 }
