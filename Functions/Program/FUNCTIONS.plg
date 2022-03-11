@@ -1,0 +1,92 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\MojePliki\Git\PPSW_AGH\Functions\Program\FUNCTIONS.uvproj
+Project File Date:  03/11/2022
+
+<h2>Output:</h2>
+Rebuild target 'Target 1'
+assembling Startup.s...
+compiling main.c...
+main.c(32): warning:  #375-D: declaration requires a typedef name
+main.c(33): warning:  #375-D: declaration requires a typedef name
+main.c(40): warning:  #375-D: declaration requires a typedef name
+main.c(46): warning:  #375-D: declaration requires a typedef name
+main.c(52): warning:  #375-D: declaration requires a typedef name
+main.c(54): warning:  #375-D: declaration requires a typedef name
+main.c(100): warning:  #192-D: unrecognized character escape sequence
+main.c(84): warning:  #177-D: variable "ucTokenNumber" was declared but never referenced
+linking...
+Program Size: Code=1408 RO-data=16 RW-data=0 ZI-data=1256  
+FromELF: creating hex file...
+".\FUNCTIONS.axf" - 0 Errors, 8 Warning(s).
+Rebuild target 'Target 1'
+assembling Startup.s...
+compiling main.c...
+main.c(32): warning:  #375-D: declaration requires a typedef name
+main.c(33): warning:  #375-D: declaration requires a typedef name
+main.c(40): warning:  #375-D: declaration requires a typedef name
+main.c(46): warning:  #375-D: declaration requires a typedef name
+main.c(52): warning:  #375-D: declaration requires a typedef name
+main.c(54): warning:  #375-D: declaration requires a typedef name
+main.c(100): warning:  #192-D: unrecognized character escape sequence
+main.c(84): warning:  #177-D: variable "ucTokenNumber" was declared but never referenced
+linking...
+Program Size: Code=1408 RO-data=16 RW-data=0 ZI-data=1256  
+FromELF: creating hex file...
+".\FUNCTIONS.axf" - 0 Errors, 8 Warning(s).
+Rebuild target 'Target 1'
+assembling Startup.s...
+compiling main.c...
+main.c(32): warning:  #375-D: declaration requires a typedef name
+main.c(33): warning:  #375-D: declaration requires a typedef name
+main.c(40): warning:  #375-D: declaration requires a typedef name
+main.c(46): warning:  #375-D: declaration requires a typedef name
+main.c(52): warning:  #375-D: declaration requires a typedef name
+main.c(54): warning:  #375-D: declaration requires a typedef name
+main.c(84): warning:  #177-D: variable "ucTokenNumber" was declared but never referenced
+linking...
+Program Size: Code=1652 RO-data=32 RW-data=316 ZI-data=1284  
+FromELF: creating hex file...
+".\FUNCTIONS.axf" - 0 Errors, 7 Warning(s).
+Rebuild target 'Target 1'
+assembling Startup.s...
+compiling main.c...
+main.c(32): warning:  #375-D: declaration requires a typedef name
+main.c(33): warning:  #375-D: declaration requires a typedef name
+main.c(40): warning:  #375-D: declaration requires a typedef name
+main.c(46): warning:  #375-D: declaration requires a typedef name
+main.c(52): warning:  #375-D: declaration requires a typedef name
+main.c(54): warning:  #375-D: declaration requires a typedef name
+linking...
+Program Size: Code=1684 RO-data=32 RW-data=316 ZI-data=1284  
+FromELF: creating hex file...
+".\FUNCTIONS.axf" - 0 Errors, 6 Warning(s).
+Rebuild target 'Target 1'
+assembling Startup.s...
+compiling main.c...
+main.c(32): warning:  #375-D: declaration requires a typedef name
+main.c(33): warning:  #375-D: declaration requires a typedef name
+main.c(40): warning:  #375-D: declaration requires a typedef name
+main.c(46): warning:  #375-D: declaration requires a typedef name
+main.c(52): warning:  #375-D: declaration requires a typedef name
+main.c(54): warning:  #375-D: declaration requires a typedef name
+linking...
+Program Size: Code=1776 RO-data=32 RW-data=316 ZI-data=1284  
+FromELF: creating hex file...
+".\FUNCTIONS.axf" - 0 Errors, 6 Warning(s).
+Rebuild target 'Target 1'
+assembling Startup.s...
+compiling main.c...
+main.c(32): warning:  #375-D: declaration requires a typedef name
+main.c(33): warning:  #375-D: declaration requires a typedef name
+main.c(40): warning:  #375-D: declaration requires a typedef name
+main.c(46): warning:  #375-D: declaration requires a typedef name
+main.c(52): warning:  #375-D: declaration requires a typedef name
+main.c(54): warning:  #375-D: declaration requires a typedef name
+linking...
+Program Size: Code=1760 RO-data=32 RW-data=316 ZI-data=1284  
+FromELF: creating hex file...
+".\FUNCTIONS.axf" - 0 Errors, 6 Warning(s).

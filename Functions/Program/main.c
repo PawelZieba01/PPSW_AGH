@@ -1,34 +1,134 @@
 #define NULL '\0'
+#define DELIMITER_CHAR ' '
+#define MAX_TOKEN_NR 3
+#define MAX_KEYWORD_STRING_LTH 10
+#define MAX_KEYWORD_NR 3
 
-char cSourceStr[] = "tekst_1";
+char cSourceStr[] = "tekst token 0x22";
 char cDestinationStr[254] = "tekst_2";
 unsigned int uiTest = 0;
 
+
+
+//---------------------------------------------------------------------------------
 enum CompResult{DIFFERENT, EQUAL};
-enum Result{OK, ERROR};
 
 void CopyString(char pcSource[], char pcDestination[]);
 enum CompResult eCompareString(char pcStr1[], char pcStr2[]);
 void AppendString(char pcSourceStr[], char pcDestinationStr[]);
 void ReplaceCharactersInString(char pcString[],char cOldChar,char cNewChar);
+//---------------------------------------------------------------------------------
+enum Result{OK, ERROR};
+
 void UIntToString(unsigned int uiValue, char pcStr[]);
 enum Result eHexStringToUInt(char pcStr[],unsigned int *puiValue);
 void AppendUIntToString(unsigned int uiValue, char pcDestinationStr[]);
+//---------------------------------------------------------------------------------
+unsigned char ucFindTokensInString (char *pcString);
+//---------------------------------------------------------------------------------
 
 
+
+typedef enum TokenType {KEYWORD, NUMBER, STRING};
+typedef enum KeywordCode { LD, ST, RST};
+
+typedef union TokenValue
+{
+	enum KeywordCode eKeyword;
+	unsigned int uiNumber;
+	char * pcString;
+};
+
+typedef struct Token
+{
+	enum TokenType eType;
+	union TokenValue uValue;
+};
+
+typedef struct Keyword
+{
+	enum KeywordCode eCode;
+	char cString[MAX_KEYWORD_STRING_LTH + 1];
+};
+
+typedef enum MsgState{TOKEN, DELIMITER};
+
+
+struct Keyword asKeywordList[MAX_KEYWORD_NR] = 
+{
+	{RST,"reset"},
+	{LD, "load" },
+	{ST, "store"}
+};
+
+struct Token asToken[MAX_TOKEN_NR];         // TABLICA Z TOKENAMI
+unsigned char ucTokenNr;										// LICZNIK TOKENOW
+
+
+
+
+
+//*********************************************************************************
 int main()
 {
-	//AppendString(cSourceStr, cDestinationStr);
-	//AppendUIntToString(0xa1b2, cDestinationStr);
+	unsigned char test1 = ucFindTokensInString("tekst token 0x22");
+	unsigned char test2 = ucFindTokensInString(" token 0x22");
+	unsigned char test3 = ucFindTokensInString("      ");
+	unsigned char test4 = ucFindTokensInString("teks   token 0x22");
+	
+	return 0;
+}
+//*********************************************************************************
+
+
+//--------------------------------- DEKODOWANIE KOMUNIKATÓW ----------------------------------
+unsigned char ucFindTokensInString(char *pcString)
+{
+	unsigned char ucCharacterNumber;
+	unsigned char ucCurrrentCharacter;
+	enum MsgState eState = DELIMITER;
+	ucTokenNr = 0;
+	
+	for(ucCharacterNumber = 0 ;; ucCharacterNumber++)
+	{
+		ucCurrrentCharacter = pcString[ucCharacterNumber];
+		
+		switch(eState)
+		{
+			case TOKEN:
+			{
+				if(ucCurrrentCharacter == NULL)
+				{
+					return ucTokenNr;
+				}
+				else if(ucCurrrentCharacter == DELIMITER_CHAR)
+				{
+					eState = DELIMITER;
+				}
+				break;
+			}
+				
+			case DELIMITER:
+			{
+				if(ucCurrrentCharacter == NULL)
+				{
+					return ucTokenNr;
+				}
+				else if(ucCurrrentCharacter != DELIMITER_CHAR)
+				{
+					eState = TOKEN;
+					asToken[ucTokenNr].uValue.pcString = &pcString[ucCharacterNumber];
+					ucTokenNr++;
+				}
+				break;
+			}
+		}
+	}
 }
 
 
 
-//DZIALA
-/*CopyString(char pcSource[], char pcDestination[])
-Zadaniem funkcji jest skopiowac lancuch znakowy wlacznie ze znakiem NULL z tablicy source do tablicy destination.
-Maksymalny poziom zagniezdzenia = 2.
-Uzyc „pelnego” fora tj. z inicjalizacja i inkrementacja licznika.*/
+//---------------------------- LANCUCHY ZNAKOWE - OPERACJE PROSTE ----------------------------
 void CopyString(char pcSource[], char pcDestination[])
 {
 	unsigned char ucStringIndex;
@@ -37,20 +137,10 @@ void CopyString(char pcSource[], char pcDestination[])
 	{
 		pcDestination[ucStringIndex] = pcSource[ucStringIndex];
 	}
-	pcDestination[ucStringIndex] = pcSource[ucStringIndex];		//LDRB
-	//pcDestination[ucStrIndex] = NULL; //MOV
+	pcDestination[ucStringIndex] = NULL;
 }
 
 
-
-//DZIALA
-/*Zadaniem funkcji jest porównywac lancuchy znakowe zakonczone znakiem NULL.
-Jezeli lancuchy sa sobie równe funkcja powinna zwracac „EQUEL” , w przeciwnym przypadku „NOTEQUAL”
-Funkcja zwraca wartosc typu „enum CompResult { DIFFERENT , EQUAL }”
-W funkcji ni powinno znajdowac sie wiecej niz 3 porównania (chociaz mozna „zejsc” do 2)
-Wystarczy jeden for i jeden if.
-Wystarczy jedna zmienna lokalna pracujaca jako licznik petli.
-Maksymalny poziom zagniezdzenia = 3.*/
 enum CompResult eCompareString(char pcStr1[], char pcStr2[])
 {
 	unsigned char ucStringIndex;
@@ -71,15 +161,6 @@ enum CompResult eCompareString(char pcStr1[], char pcStr2[])
 }
 
 
-
-//DZIALA
-/*Zadaniem funkcji jest dodac do lancucha znakowego znajdujacego sie w cDestinationStr lancuch znakowy
-znajdujacy sie w cSourceStr.
-Pierwszy znak lancucha cSourceStr powinien zostac nadpisany na NULL-u lancucha cDestinationStr .
-Nalezy wykorzystac jedna z wczesniejszych funkcji.
-Wystarczy jeden for.
-Nie uzywac bufora pomocniczego.*/
-// Tu trzeba uwazac zeby nie dokleic znakow poza tablice pcDestinationStr!
 void AppendString(char pcSourceStr[], char pcDestinationStr[])
 {
 	unsigned char ucLastCharacter;
@@ -88,8 +169,7 @@ void AppendString(char pcSourceStr[], char pcDestinationStr[])
 	CopyString(pcSourceStr, &pcDestinationStr[ucLastCharacter]);
 }
 
-//DZIALA
-/*Zadaniem funkcji jest zamienic w String-u wszystkie znaki OldChar na NewChar.*/
+
 void ReplaceCharactersInString(char pcString[], char cOldChar, char cNewChar)
 {
 	unsigned char ucStringIndex;
@@ -104,24 +184,7 @@ void ReplaceCharactersInString(char pcString[], char cOldChar, char cNewChar)
 }
 
 
-
-//DZIALA
-/*Zadaniem funkcji jest skonwertowac liczbe typu „ui” na lancuch tekstowy w formacie heksadecymalnym.
-Lancuch tekstowy powinien znalezc sie w tablicy „cStr”.
-Lancuch powinien konczyc sie znakiem NULL.
-Lancuch musi zaczynac sie od „0x” nastepnie moga pojawiac sie kody ascci z zakresów „0-9”, „A-F”
-Przyklady:
-uiValue = 0; cStr=”0x0000”+NULL
-uiValue = 1; cStr=”0x0001”+NULL
-uiValue = 65000; cStr=0xFDE8”+NULL
-Przed implementacja nalezy zapoznac sie z tablica kodów ascii oraz z zapisem heksadecymalny.
-Nalezy iterowac po tetradach (niblach, tetradach) zmiennej uiValue od najmlodszej do najstarszej.
-Uzywac operatorów bitowych w tym przesuniec. Maski bitowe powinny miec odpowiedni format.
-Nie stosowac wiecej niz jednej petli w kodzie.
-Nie modyfikowac zmiennej wejsciowej uiValue;
-Nie stosowac tablic ani cas-ów do przekodowywania liczby na znak.
-Wystarcza dwie zmienne lokalne (wliczajac licznik petli).
-Unikac powtórzen kodu.*/
+//---------------------------- LANCUCHY ZNAKOWE - KONWERSJE ----------------------------
 void UIntToString(unsigned int uiValue, char pcStr[])
 {
 	signed char ucTetradeIndex;
@@ -147,19 +210,6 @@ void UIntToString(unsigned int uiValue, char pcStr[])
 }
 
 
-
-//DZIALA
-/*Zadaniem funkcji jest zamienic lancuch znakowy w formacie hexadecymalnym (duze litery) na wartosc.
-Adres lancucha znajduje sie w zmiennej cStr.
-Zaklada sie ze jest to lancuch typu NULL terminated string
-Wartosc przekazywana jest na zewnatrz funkcji poprzez wskaznik puiValue
-Lancuch heksadecymalny akceptowany przez funkcje musi zaczynac sie od „0x” .
-Po „0x” musi znajdowac sie przynajmniej jeden znak rózny od NULL.
-Po „0x” nie moze znajdowac sie wiecej niz 4 znaki rózne od NULL.
-Zgodnosc z formatem powinna sie zakonczyc zwróceniem przez funkcje wartosci OK. a niezgodnosc ERROR.
-Funkcja zwraca wartosc typu „enum Result { OK, ERROR }”
-Maksymalnie jeden „for”.
-W „forze” jedno odwolanie do tablicy „[]”. Nie uzywac wskazników do iterowania po cStr.*/
 enum Result eHexStringToUInt(char pcStr[],unsigned int *puiValue)
 {
 	unsigned char ucStringIndex;
@@ -204,12 +254,6 @@ enum Result eHexStringToUInt(char pcStr[],unsigned int *puiValue)
 }
 
 
-
-//DZIALA
-/*Zadaniem funkcji jest dodac liczbe w formacie heksadecymalnym (patrz ucUIntToHexStr) do lancucha
-znakowego znajdujacego sie w cDestinationStr.
-Pierwszy znak liczby powinien zostac nadpisany na NULL-u lancucha cDestinationStr.
-Nie nalezy tworzyc bufora pomocniczego – nalezy odpowiednio zastosowac wskazniki.*/
 void AppendUIntToString (unsigned int uiValue, char pcDestinationStr[])
 {
 	unsigned char ucLastCharacter;
