@@ -4,33 +4,11 @@
 #define MAX_KEYWORD_STRING_LTH 10
 #define MAX_KEYWORD_NR 3
 
-char cSourceStr[] = "tekst token 0x22";
-char cDestinationStr[254] = "tekst_2";
-unsigned int uiTest = 0;
-
-
-
-//---------------------------------------------------------------------------------
+enum Result{OK, ERROR};
 enum CompResult{DIFFERENT, EQUAL};
 
-void CopyString(char pcSource[], char pcDestination[]);
-enum CompResult eCompareString(char pcStr1[], char pcStr2[]);
-void AppendString(char pcSourceStr[], char pcDestinationStr[]);
-void ReplaceCharactersInString(char pcString[],char cOldChar,char cNewChar);
-//---------------------------------------------------------------------------------
-enum Result{OK, ERROR};
-
-void UIntToString(unsigned int uiValue, char pcStr[]);
-enum Result eHexStringToUInt(char pcStr[],unsigned int *puiValue);
-void AppendUIntToString(unsigned int uiValue, char pcDestinationStr[]);
-//---------------------------------------------------------------------------------
-unsigned char ucFindTokensInString (char *pcString);
-//---------------------------------------------------------------------------------
-
-
-
 typedef enum TokenType {KEYWORD, NUMBER, STRING};
-typedef enum KeywordCode { LD, ST, RST};
+typedef enum KeywordCode {LD, ST, RST};
 
 typedef union TokenValue
 {
@@ -54,6 +32,39 @@ typedef struct Keyword
 typedef enum MsgState{TOKEN, DELIMITER};
 
 
+//---------------------------- LANCUCHY ZNAKOWE - OPERACJE PROSTE ----------------------------
+void CopyString(char pcSource[], char pcDestination[]);
+enum CompResult eCompareString(char pcStr1[], char pcStr2[]);
+void AppendString(char pcSourceStr[], char pcDestinationStr[]);
+void ReplaceCharactersInString(char pcString[],char cOldChar,char cNewChar);
+
+//------------------------------- LANCUCHY ZNAKOWE - KONWERSJE -------------------------------
+void UIntToString(unsigned int uiValue, char pcStr[]);
+enum Result eHexStringToUInt(char pcStr[],unsigned int *puiValue);
+void AppendUIntToString(unsigned int uiValue, char pcDestinationStr[]);
+
+//--------------------------------- DEKODOWANIE KOMUNIKATÓW ----------------------------------
+unsigned char ucFindTokensInString (char *pcString);
+enum Result eStringToKeyword (char pcStr[],enum KeywordCode *peKeywordCode);
+void DecodeTokens(void);
+void DecodeMsg(char *pcString);
+
+
+
+
+
+
+
+//------------ zmienne pomocnicze --------------
+char cSourceStr[] = "store load reset";
+char cDestinationStr[254] = "tekst_2";
+unsigned int uiTest = 0;
+
+
+
+
+
+
 struct Keyword asKeywordList[MAX_KEYWORD_NR] = 
 {
 	{RST,"reset"},
@@ -64,96 +75,50 @@ struct Keyword asKeywordList[MAX_KEYWORD_NR] =
 struct Token asToken[MAX_TOKEN_NR];         // TABLICA Z TOKENAMI
 unsigned char ucTokenNr;										// LICZNIK TOKENOW
 
-
-
-
-
-//*********************************************************************************
+//********************************** MAIN ****************************************
 int main()
 {
-	unsigned char test1 = ucFindTokensInString("tekst token 0x22");
-	unsigned char test2 = ucFindTokensInString(" token 0x22");
-	unsigned char test3 = ucFindTokensInString("      ");
-	unsigned char test4 = ucFindTokensInString("teks   token 0x22");
-	
+	DecodeMsg(cSourceStr);
+
 	return 0;
 }
 //*********************************************************************************
 
 
-//--------------------------------- DEKODOWANIE KOMUNIKATÓW ----------------------------------
-unsigned char ucFindTokensInString(char *pcString)
-{
-	unsigned char ucCharacterNumber;
-	unsigned char ucCurrrentCharacter;
-	enum MsgState eState = DELIMITER;
-	ucTokenNr = 0;
-	
-	for(ucCharacterNumber = 0 ;; ucCharacterNumber++)
-	{
-		ucCurrrentCharacter = pcString[ucCharacterNumber];
-		
-		switch(eState)
-		{
-			case TOKEN:
-			{
-				if(ucCurrrentCharacter == NULL)
-				{
-					return ucTokenNr;
-				}
-				else if(ucCurrrentCharacter == DELIMITER_CHAR)
-				{
-					eState = DELIMITER;
-				}
-				break;
-			}
-				
-			case DELIMITER:
-			{
-				if(ucCurrrentCharacter == NULL)
-				{
-					return ucTokenNr;
-				}
-				else if(ucCurrrentCharacter != DELIMITER_CHAR)
-				{
-					eState = TOKEN;
-					asToken[ucTokenNr].uValue.pcString = &pcString[ucCharacterNumber];
-					ucTokenNr++;
-				}
-				break;
-			}
-		}
-	}
-}
+
+
+
+
+
 
 
 
 //---------------------------- LANCUCHY ZNAKOWE - OPERACJE PROSTE ----------------------------
 void CopyString(char pcSource[], char pcDestination[])
 {
-	unsigned char ucStringIndex;
+	unsigned char ucCharacterCounter;
 	
-	for(ucStringIndex = 0; pcSource[ucStringIndex] != NULL; ucStringIndex++)
+	for(ucCharacterCounter = 0; pcSource[ucCharacterCounter] != NULL; ucCharacterCounter++)
 	{
-		pcDestination[ucStringIndex] = pcSource[ucStringIndex];
+		pcDestination[ucCharacterCounter] = pcSource[ucCharacterCounter];
 	}
-	pcDestination[ucStringIndex] = NULL;
+	pcDestination[ucCharacterCounter] = NULL;
 }
 
 
 enum CompResult eCompareString(char pcStr1[], char pcStr2[])
 {
-	unsigned char ucStringIndex;
+	unsigned char ucCharacterCounter;
 	
-	for(ucStringIndex = 0; pcStr1[ucStringIndex] != NULL; ucStringIndex++)
+	for(ucCharacterCounter = 0; pcStr1[ucCharacterCounter] != NULL; ucCharacterCounter++)
 	{
-		if(pcStr1[ucStringIndex] != pcStr2[ucStringIndex])
+		if(pcStr1[ucCharacterCounter] != pcStr2[ucCharacterCounter])
 		{
 			return DIFFERENT;
 		}
 	}
 	
-	if(NULL == pcStr2[ucStringIndex])
+	if(NULL == pcStr2[ucCharacterCounter])
 	{
 		return EQUAL;
 	}
@@ -172,16 +137,17 @@ void AppendString(char pcSourceStr[], char pcDestinationStr[])
 
 void ReplaceCharactersInString(char pcString[], char cOldChar, char cNewChar)
 {
-	unsigned char ucStringIndex;
+	unsigned char ucCharacterCounter;
 	
-	for(ucStringIndex = 0; pcString[ucStringIndex] != NULL; ucStringIndex++)
+	for(ucCharacterCounter = 0; pcString[ucCharacterCounter] != NULL; ucCharacterCounter++)
 	{
-		if(pcString[ucStringIndex] == cOldChar)
+		if(pcString[ucCharacterCounter] == cOldChar)
 		{
-			pcString[ucStringIndex] = cNewChar;
+			pcString[ucCharacterCounter] = cNewChar;
 		}
 	}
 }
+
 
 
 //---------------------------- LANCUCHY ZNAKOWE - KONWERSJE ----------------------------
@@ -260,5 +226,105 @@ void AppendUIntToString (unsigned int uiValue, char pcDestinationStr[])
 	
 	for(ucLastCharacter = 0; pcDestinationStr[ucLastCharacter] != NULL; ucLastCharacter++){}
 	UIntToString(uiValue, &pcDestinationStr[ucLastCharacter]);
+}
+
+
+
+//--------------------------------- DEKODOWANIE KOMUNIKATÓW ----------------------------------
+unsigned char ucFindTokensInString(char *pcString)
+{
+	unsigned char ucCharacterNumber;
+	unsigned char ucCurrrentCharacter;
+	enum MsgState eState = DELIMITER;
+	unsigned char ucTokenNumber = 0;
+	
+	for(ucCharacterNumber = 0 ;; ucCharacterNumber++)
+	{
+		ucCurrrentCharacter = pcString[ucCharacterNumber];
+		
+		switch(eState)
+		{
+			case TOKEN:
+			{
+				if(ucCurrrentCharacter == NULL)
+				{
+					return ucTokenNumber;
+				}
+				else if(ucCurrrentCharacter == DELIMITER_CHAR)
+				{
+					eState = DELIMITER;
+				}
+				break;
+			}
+				
+			case DELIMITER:
+			{
+				if(ucCurrrentCharacter == NULL)
+				{
+					return ucTokenNumber;
+				}
+				else if(ucCurrrentCharacter != DELIMITER_CHAR)
+				{
+					eState = TOKEN;
+					asToken[ucTokenNumber].uValue.pcString = &pcString[ucCharacterNumber];
+					ucTokenNumber++;
+				}
+				break;
+			}
+		}
+	}
+}
+
+
+enum Result eStringToKeyword (char pcStr[],enum KeywordCode *peKeywordCode)
+{
+	unsigned char ucKeywordCounter;
+	
+	for(ucKeywordCounter = 0; ucKeywordCounter < MAX_KEYWORD_NR; ucKeywordCounter++)
+	{
+		if(EQUAL == eCompareString(pcStr, asKeywordList[ucKeywordCounter].cString))
+		{
+			*peKeywordCode = asKeywordList[ucKeywordCounter].eCode;
+			return OK;
+		}
+	}
+	return ERROR;
+}
+
+
+void DecodeTokens(void)
+{
+	unsigned char ucTokenCounter;
+	struct Token * psCurrentToken;
+	unsigned int uiTokenValue;
+	enum KeywordCode eTokenCode;
+	
+	for(ucTokenCounter = 0; ucTokenCounter < ucTokenNr; ucTokenCounter++)
+	{
+		psCurrentToken = &asToken[ucTokenCounter];
+		
+		if(OK == eStringToKeyword(psCurrentToken->uValue.pcString, &eTokenCode))
+		{
+			psCurrentToken->eType = KEYWORD;
+			psCurrentToken->uValue.eKeyword = eTokenCode;
+		}
+		else if(OK == eHexStringToUInt(psCurrentToken->uValue.pcString, &uiTokenValue))
+		{
+			psCurrentToken->eType = NUMBER;
+			psCurrentToken->uValue.uiNumber = uiTokenValue;
+		}
+		else
+		{
+			psCurrentToken->eType = STRING;
+		}
+	}
+}
+
+
+void DecodeMsg(char *pcString)
+{
+	ucTokenNr = ucFindTokensInString(pcString);
+	ReplaceCharactersInString(pcString, DELIMITER_CHAR, NULL);
+	DecodeTokens();
 }
 
