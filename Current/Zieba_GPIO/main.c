@@ -24,8 +24,8 @@ void Delay(unsigned int uiDelayMilliseconds) 															//ok 65 sekund chyba
 
 void LedInit()
 {
-	IO1DIR = IO1DIR | LED0_bm | LED1_bm | LED2_bm | LED3_bm;
-	IO1SET = IO1SET | LED0_bm;
+	IO1DIR |= LED0_bm | LED1_bm | LED2_bm | LED3_bm;
+	IO1SET |= LED0_bm;
 }
 
 void LedOn(unsigned char ucLedIndeks)
@@ -44,22 +44,23 @@ void LedOn(unsigned char ucLedIndeks)
 		case 3:
             IO1SET |= LED3_bm;
             break;
+		default:
+			IO1CLR |= LED0_bm | LED1_bm | LED2_bm | LED3_bm;
 	}
 }
 
 
-enum ButtonState {RELASED, PRESSED};
+enum KeyboardState {RELASED, BUTTON_0, BUTTON_1, BUTTON_2, BUTTON_3};
 
-enum ButtonState ReadButton1()
+enum KeyboardState eKeyboardRead()
 {
-    if((IO0PIN & BUTTON0_bm) == 0)
-    {
-        return PRESSED;
-    }
-    else    
-    {
-        return RELASED;
-	}
+	unsigned char ucKeyboardBits = IO0PIN & 0xF0; 
+	
+		if((ucKeyboardBits & BUTTON0_bm) == 0) {return BUTTON_0;}
+		else if((ucKeyboardBits & BUTTON1_bm) == 0) {return BUTTON_1;}	 
+		else if((ucKeyboardBits & BUTTON2_bm) == 0) {return BUTTON_2;}
+		else if((ucKeyboardBits & BUTTON3_bm) == 0) {return BUTTON_3;}
+		else {return RELASED;}
 }
 
 void KeyboardInit()
@@ -76,18 +77,29 @@ int main()
 	
 	while(1)
 	{
-		switch(ReadButton1())
+		LedOn(4);
+		switch(eKeyboardRead())
         {
-            case PRESSED:
-				IO1SET |= LED1_bm;
-				IO1CLR |= LED0_bm;
+            case RELASED:
+				LedOn(4);
 				break;
 			
-            case RELASED:
-				IO1SET |= LED0_bm;
-				IO1CLR |= LED1_bm;
-                break;
+            case BUTTON_0:
+				LedOn(0);
+				break;
+			
+			case BUTTON_1:
+				LedOn(1);
+				break;
+			
+			case BUTTON_2:
+				LedOn(2);
+				break;
+			
+			case BUTTON_3:
+				LedOn(3);
+				break;
         }
 	}
 }
-//4.18
+//4.19
