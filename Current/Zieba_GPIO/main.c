@@ -62,10 +62,17 @@ enum ButtonState ReadButton1()
 	}
 }
 
+void KeyboardInit()
+{
+	IO1DIR = IO1DIR & ~(BUTTON0_bm | BUTTON1_bm | BUTTON2_bm | BUTTON3_bm);
+}
+
+
 
 int main()
 {	
 	LedInit();
+	KeyboardInit();
 	
 	while(1)
 	{
@@ -83,4 +90,4 @@ int main()
         }
 	}
 }
-//4.17
+//4.18
