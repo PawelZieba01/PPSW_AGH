@@ -9,8 +9,6 @@
 #define LED6_bm (1<<22)
 #define LED7_bm (1<<23)
 
-#define LEDx_bm(led_number) (1<<(16 + led_number))
-
 
 
 void Delay(unsigned int uiDelayMilliseconds) 															//ok 65 sekund chyba wystarczy - uint
@@ -29,6 +27,24 @@ void LedInit()
 	IO1SET = IO1SET | LED0_bm;
 }
 
+void LedOn(unsigned char ucLedIndeks)
+{
+	switch(ucLedIndeks)
+	{
+		case 0:
+			IO1SET |= LED0_bm;
+			break;
+		case 1:
+			IO1SET |= LED1_bm;
+			break;
+		case 2:
+			IO1SET |= LED2_bm;
+			break;
+		case 3:
+			IO1SET |= LED3_bm;
+			break;
+	}
+}
 
 
 int main()
@@ -39,10 +55,10 @@ int main()
 	
 	while(1)
 	{
-		IO1SET |= LEDx_bm(ucLedNumber % 4);
+		LedOn(ucLedNumber % 4);
 		Delay(250);
-		IO1CLR |= LEDx_bm(ucLedNumber % 4);
+		IO1CLR |= (1<<(16 + (ucLedNumber % 4)));
 		ucLedNumber++;																													//po przekroczeniu zakresu ucLedNumber jest ok
 	}
 }
-//4.12
+//4.14
