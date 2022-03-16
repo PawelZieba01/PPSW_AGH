@@ -12,11 +12,11 @@
 
 
 
-void Delay(unsigned int uiDelayMilliseconds) 															//ok 65 sekund chyba wystarczy - uint
+void Delay(unsigned int uiDelayMilliseconds) 													//ok 65 sekund chyba wystarczy - uint
 {
 	unsigned int uiDelayCounter;
 	
-	for(; uiDelayMilliseconds > 0; uiDelayMilliseconds--)										//dwie petle bo mnozenie troche zajmuje
+	for(; uiDelayMilliseconds > 0; uiDelayMilliseconds--)										//dwie petle bo mnozenie troche zajmuje i nie trzeba uinta32
 	{
 		for(uiDelayCounter = 0; uiDelayCounter < 7500; uiDelayCounter++){}
 	}
@@ -30,6 +30,8 @@ void LedInit()
 
 void LedOn(unsigned char ucLedIndeks)
 {
+	IO1CLR |= LED0_bm | LED1_bm | LED2_bm | LED3_bm;
+	
 	switch(ucLedIndeks)
 	{
 		case 0:
@@ -44,8 +46,6 @@ void LedOn(unsigned char ucLedIndeks)
 		case 3:
             IO1SET |= LED3_bm;
             break;
-		default:
-			IO1CLR |= LED0_bm | LED1_bm | LED2_bm | LED3_bm;
 	}
 }
 
@@ -69,6 +69,14 @@ void KeyboardInit()
 }
 
 
+unsigned int LedModuloCounter = 0;
+
+void StepLeft()
+{
+	LedModuloCounter++;
+	LedOn(LedModuloCounter % 4);
+}
+
 
 int main()
 {	
@@ -77,29 +85,8 @@ int main()
 	
 	while(1)
 	{
-		LedOn(4);
-		switch(eKeyboardRead())
-        {
-            case RELASED:
-				LedOn(4);
-				break;
-			
-            case BUTTON_0:
-				LedOn(0);
-				break;
-			
-			case BUTTON_1:
-				LedOn(1);
-				break;
-			
-			case BUTTON_2:
-				LedOn(2);
-				break;
-			
-			case BUTTON_3:
-				LedOn(3);
-				break;
-        }
+		Delay(250);
+		StepLeft();
 	}
 }
-//4.19
+//4.20
