@@ -47,15 +47,18 @@ void LedOn(unsigned char ucLedIndeks)
 	}
 }
 
-unsigned char ReadButton1()
+
+enum ButtonState {RELASED, PRESSED};
+
+enum ButtonState ReadButton1()
 {
     if((IO0PIN & BUTTON0_bm) == 0)
     {
-        return 1;
+        return PRESSED;
     }
     else    
     {
-        return 0;
+        return RELASED;
 	}
 }
 
@@ -66,16 +69,18 @@ int main()
 	
 	while(1)
 	{
-		if(ReadButton1() == 1)	
-		{
-			IO1SET |= LED1_bm;
-            IO1CLR |= LED0_bm;
-		}
-		else
-		{
-			IO1SET |= LED0_bm;
-            IO1CLR |= LED1_bm;
-		}
+		switch(ReadButton1())
+        {
+            case PRESSED:
+				IO1SET |= LED1_bm;
+				IO1CLR |= LED0_bm;
+				break;
+			
+            case RELASED:
+				IO1SET |= LED0_bm;
+				IO1CLR |= LED1_bm;
+                break;
+        }
 	}
 }
-//4.16
+//4.17
