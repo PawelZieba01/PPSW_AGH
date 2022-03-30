@@ -11,22 +11,22 @@
 #define BUTTON3_bm (1<<7)
 
 
-void Delay(unsigned int uiDelayMilliseconds) 													//ok 65 sekund chyba wystarczy - uint
+void Delay(unsigned int uiDelayMilliseconds)
 {
 	unsigned int uiDelayCounter;
 	
-	for(; uiDelayMilliseconds > 0; uiDelayMilliseconds--)										//dwie petle bo mnozenie troche zajmuje i nie trzeba uinta32
+	for(; uiDelayMilliseconds > 0; uiDelayMilliseconds--)
 	{
 		for(uiDelayCounter = 0; uiDelayCounter < 7500; uiDelayCounter++){}
 	}
 }
+
 
 void LedInit()
 {
 	IO1DIR |= LED0_bm | LED1_bm | LED2_bm | LED3_bm;
 	IO1SET = LED0_bm;
 }
-
 
 
 void LedOn(unsigned char ucLedIndeks)
@@ -49,7 +49,6 @@ void LedOn(unsigned char ucLedIndeks)
             break;
 	}
 }
-
 
 
 enum KeyboardState {RELASED, BUTTON_0, BUTTON_1, BUTTON_2, BUTTON_3};
@@ -88,8 +87,6 @@ void KeyboardInit()
 }
 
 
-
-
 enum StepLedDirection {LEFT, RIGHT};
 
 void LedStep(enum StepLedDirection eDirection)
@@ -99,32 +96,45 @@ void LedStep(enum StepLedDirection eDirection)
 	if(eDirection == LEFT)
 	{
 		LedModuloCounter++;
-		LedOn(LedModuloCounter % 4);
 	}
 	else if(eDirection == RIGHT)
 	{
 		LedModuloCounter--;
-		LedOn(LedModuloCounter % 4);
 	}
+	
+	LedOn(LedModuloCounter % 4);
 }
 
-//4.24
+
+void LedStepRight()
+{
+	LedStep(RIGHT);
+}
+
+
+void LedStepLeft()
+{
+	LedStep(LEFT);
+}
+
+
+
+//4.25
 int main()
 {	
 	LedInit();
 	
 	while(1)
 	{
+		Delay(250);
 		switch(eKeyboardRead())
 		{
 			case BUTTON_1:
-				Delay(250);
-				LedStep(RIGHT);
+				LedStepRight();
 				break;
 			
 			case BUTTON_2:
-				Delay(250);
-				LedStep(LEFT);
+				LedStepLeft();
 				break;	
 			
 			default:
