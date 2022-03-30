@@ -3,11 +3,11 @@
 <title>Static Call Graph - [.\Zieba_GPIO.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Zieba_GPIO.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Wed Mar 30 09:22:41 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Wed Mar 30 10:24:08 2022
 <BR><P>
 <H3>Maximum Stack Usage =          8 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-main &rArr; LedStepLeft &rArr; LedStep
+main &rArr; LedStepRight &rArr; LedStep
 <P>
 <H3>
 Functions with no stack information
@@ -180,60 +180,60 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[11]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_setup_stackheap
 </UL>
 
-<P><STRONG><a name="[1f]"></a>Delay</STRONG> (ARM, 44 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[1b]"></a>Delay</STRONG> (ARM, 44 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-</UL>
-
-<P><STRONG><a name="[1e]"></a>LedInit</STRONG> (ARM, 32 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-</UL>
-
-<P><STRONG><a name="[1b]"></a>LedOn</STRONG> (ARM, 136 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStep
-</UL>
-
-<P><STRONG><a name="[20]"></a>eKeyboardRead</STRONG> (ARM, 84 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-</UL>
-
-<P><STRONG><a name="[45]"></a>KeyboardInit</STRONG> (ARM, 24 bytes, Stack size 0 bytes, main.o(.text), UNUSED)
-
-<P><STRONG><a name="[1a]"></a>LedStep</STRONG> (ARM, 92 bytes, Stack size 4 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = LedStep
-</UL>
-<BR>[Calls]<UL><LI><a href="#[1b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedOn
-</UL>
-<BR>[Called By]<UL><LI><a href="#[1d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStepLeft
-<LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStepRight
-</UL>
-
-<P><STRONG><a name="[1c]"></a>LedStepRight</STRONG> (ARM, 20 bytes, Stack size 4 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LedStepRight &rArr; LedStep
-</UL>
-<BR>[Calls]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStep
-</UL>
-<BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-</UL>
-
-<P><STRONG><a name="[1d]"></a>LedStepLeft</STRONG> (ARM, 20 bytes, Stack size 4 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LedStepLeft &rArr; LedStep
-</UL>
-<BR>[Calls]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStep
-</UL>
-<BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[a]"></a>main</STRONG> (ARM, 80 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = main &rArr; LedStepLeft &rArr; LedStep
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = main &rArr; LedStepRight &rArr; LedStep
 </UL>
-<BR>[Calls]<UL><LI><a href="#[1d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStepLeft
-<LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStepRight
-<LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eKeyboardRead
-<LI><a href="#[1e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedInit
-<LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
+<BR>[Calls]<UL><LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eKeyboardRead
+<LI><a href="#[1d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStepRight
+<LI><a href="#[1e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStepLeft
+<LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedInit
+<LI><a href="#[1b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> rtentry2.o(.ARM.Collect$$rtentry$$0000000D)
 </UL>
+<P><STRONG><a name="[1a]"></a>LedInit</STRONG> (ARM, 32 bytes, Stack size 0 bytes, led.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[20]"></a>LedOn</STRONG> (ARM, 136 bytes, Stack size 0 bytes, led.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStep
+</UL>
+
+<P><STRONG><a name="[1f]"></a>LedStep</STRONG> (ARM, 92 bytes, Stack size 4 bytes, led.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = LedStep
+</UL>
+<BR>[Calls]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedOn
+</UL>
+<BR>[Called By]<UL><LI><a href="#[1d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStepRight
+<LI><a href="#[1e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStepLeft
+</UL>
+
+<P><STRONG><a name="[1d]"></a>LedStepRight</STRONG> (ARM, 20 bytes, Stack size 4 bytes, led.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LedStepRight &rArr; LedStep
+</UL>
+<BR>[Calls]<UL><LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStep
+</UL>
+<BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[1e]"></a>LedStepLeft</STRONG> (ARM, 20 bytes, Stack size 4 bytes, led.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LedStepLeft &rArr; LedStep
+</UL>
+<BR>[Calls]<UL><LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LedStep
+</UL>
+<BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[1c]"></a>eKeyboardRead</STRONG> (ARM, 84 bytes, Stack size 0 bytes, keyboard.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[45]"></a>KeyboardInit</STRONG> (ARM, 24 bytes, Stack size 0 bytes, keyboard.o(.text), UNUSED)
+
 <P><STRONG><a name="[46]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
 <P><STRONG><a name="[47]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
