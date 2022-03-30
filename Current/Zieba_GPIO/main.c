@@ -89,30 +89,48 @@ void KeyboardInit()
 
 
 
-unsigned int LedModuloCounter = 0;
 
-void StepLeft()
+enum StepLedDirection {LEFT, RIGHT};
+
+void LedStep(enum StepLedDirection eDirection)
 {
-	LedModuloCounter++;
-	LedOn(LedModuloCounter % 4);
+	static unsigned int LedModuloCounter = 0;
+	
+	if(eDirection == LEFT)
+	{
+		LedModuloCounter++;
+		LedOn(LedModuloCounter % 4);
+	}
+	else if(eDirection == RIGHT)
+	{
+		LedModuloCounter--;
+		LedOn(LedModuloCounter % 4);
+	}
 }
 
-void StepRight()
-{
-	LedModuloCounter--;
-	LedOn(LedModuloCounter % 4);
-}
-
-
-//4.21
+//4.24
 int main()
 {	
 	LedInit();
 	
 	while(1)
 	{
-		Delay(250);
-		StepRight();
+		switch(eKeyboardRead())
+		{
+			case BUTTON_1:
+				Delay(250);
+				LedStep(RIGHT);
+				break;
+			
+			case BUTTON_2:
+				Delay(250);
+				LedStep(LEFT);
+				break;	
+			
+			default:
+				break;
+		}
+
 	}
 }
 
