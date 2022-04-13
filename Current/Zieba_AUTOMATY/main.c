@@ -6,8 +6,8 @@ void Delay(unsigned int uiDelayMilliseconds);
 
 int main()
 {
-	enum LedState {LED_LEFT, LED_RIGHT};
-	enum LedState eLedState = LED_LEFT;
+	enum LedState {STATE0, STATE1, STATE2, STATE3, STATE4, STATE5};
+	enum LedState eLedState = STATE0;
 
 	LedInit();
 
@@ -15,17 +15,37 @@ int main()
 	{
 		switch(eLedState)
 		{
-			case LED_LEFT:
-				eLedState = LED_RIGHT;
-				LedStepRight();
+			case STATE0:
+				LedStepLeft();
+				eLedState = STATE1;
 				break;
 			
-			case LED_RIGHT:
-				eLedState = LED_LEFT;
+			case STATE1:
 				LedStepLeft();
+				eLedState = STATE2;
+				break;
+			
+			case STATE2:
+				LedStepLeft();
+				eLedState = STATE3;
+				break;
+			
+			case STATE3:
+				LedStepRight();
+				eLedState = STATE4;
+				break;
+			
+			case STATE4:
+				LedStepRight();
+				eLedState = STATE5;
+				break;
+			
+			case STATE5:
+				LedStepRight();
+				eLedState = STATE0;
 				break;
 		}
-		Delay(500);
+		Delay(100);
 	}
 	
 }
