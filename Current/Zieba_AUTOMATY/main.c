@@ -6,45 +6,50 @@ void Delay(unsigned int uiDelayMilliseconds);
 
 int main()
 {
-	enum LedState {STATE0, STATE1, STATE2, STATE3, STATE4, STATE5};
-	enum LedState eLedState = STATE0;
+	enum LedShiftDir {SHIFT_LEFT, SHIFT_RIGHT};
+	enum LedShiftDir eShiftDir = SHIFT_LEFT;
+
+	unsigned short int usiShiftCounter = 0;
 
 	LedInit();
 
+
 	while(1)
 	{
-		switch(eLedState)
+		switch(eShiftDir)
 		{
-			case STATE0:
+			case SHIFT_LEFT:
 				LedStepLeft();
-				eLedState = STATE1;
+				usiShiftCounter++;
+			
+				if(usiShiftCounter > 2)
+				{
+					eShiftDir = SHIFT_RIGHT;
+				}
+				else
+				{
+					eShiftDir = SHIFT_LEFT;
+				}
 				break;
 			
-			case STATE1:
-				LedStepLeft();
-				eLedState = STATE2;
-				break;
-			
-			case STATE2:
-				LedStepLeft();
-				eLedState = STATE3;
-				break;
-			
-			case STATE3:
+			case SHIFT_RIGHT:
 				LedStepRight();
-				eLedState = STATE4;
+				usiShiftCounter--;
+			
+				if(usiShiftCounter < 1)
+				{
+					eShiftDir = SHIFT_LEFT;
+				}
+				else
+				{
+					eShiftDir = SHIFT_RIGHT;
+				}
 				break;
 			
-			case STATE4:
-				LedStepRight();
-				eLedState = STATE5;
-				break;
-			
-			case STATE5:
-				LedStepRight();
-				eLedState = STATE0;
+			default:
 				break;
 		}
+		
 		Delay(100);
 	}
 	
