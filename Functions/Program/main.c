@@ -56,7 +56,7 @@ void DecodeMsg(char *pcString);
 
 
 //------------ zmienne pomocnicze --------------
-char cSourceStr[] = "token load napis";
+char cSourceStr[] = "token load 0xFF0 trzy";
 char cDestinationStr[254] = "tekst_2";
 unsigned int uiTest = 0;
 
@@ -264,7 +264,11 @@ unsigned char ucFindTokensInString(char *pcString)
 				
 			case DELIMITER:
 			{
-				if(ucCurrrentCharacter == NULL)
+				if(ucTokenNr == MAX_TOKEN_NR)
+				{
+					return ucTokenNumber;
+				}
+				else if(ucCurrrentCharacter == NULL)
 				{
 					return ucTokenNumber;
 				}
