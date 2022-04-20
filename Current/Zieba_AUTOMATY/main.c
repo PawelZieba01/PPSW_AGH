@@ -1,4 +1,5 @@
 #include "led.h"
+#include "keyboard.h"
 
 void Delay(unsigned int uiDelayMilliseconds);
 
@@ -6,8 +7,8 @@ void Delay(unsigned int uiDelayMilliseconds);
 
 int main()
 {
-	enum LedShiftDir {SHIFT_LEFT, SHIFT_RIGHT};
-	enum LedShiftDir eShiftDir = SHIFT_LEFT;
+	enum LedState {STOP, SHIFT};
+	enum LedState eLedState = STOP;
 
 	unsigned short int usiShiftCounter = 0;
 
@@ -16,43 +17,38 @@ int main()
 
 	while(1)
 	{
-		switch(eShiftDir)
+		switch(eLedState)
 		{
-			case SHIFT_LEFT:
-				LedStepLeft();
-				usiShiftCounter++;
-			
-				if(usiShiftCounter > 2)
+			case STOP:
+				if(BUTTON_0 == eKeyboardRead())
 				{
-					eShiftDir = SHIFT_RIGHT;
+					eLedState = SHIFT;
 				}
 				else
 				{
-					eShiftDir = SHIFT_LEFT;
+					eLedState = STOP;
 				}
 				break;
 			
-			case SHIFT_RIGHT:
-				LedStepRight();
-				usiShiftCounter--;
-			
-				if(usiShiftCounter < 1)
+			case SHIFT:
+				if(usiShiftCounter >= 3)
 				{
-					eShiftDir = SHIFT_LEFT;
+					usiShiftCounter = 0;
+					eLedState = STOP;
 				}
 				else
 				{
-					eShiftDir = SHIFT_RIGHT;
+					LedStepRight();
+					usiShiftCounter++;
+					eLedState = SHIFT;
 				}
 				break;
 			
 			default:
 				break;
 		}
-		
 		Delay(100);
 	}
-	
 }
 
 
