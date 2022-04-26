@@ -7,7 +7,7 @@ void Delay(unsigned int uiDelayMilliseconds);
 
 int main()
 {
-	enum LedState {STOP, SHIFT_RIGHT};
+	enum LedState {STOP, SHIFT_RIGHT, SHIFT_LEFT};
 	enum LedState eLedState = SHIFT_RIGHT;
 
 	LedInit();
@@ -18,7 +18,11 @@ int main()
 		switch(eLedState)
 		{
 			case STOP:
-				if(BUTTON_1 == eKeyboardRead())
+				if(BUTTON_0 == eKeyboardRead())
+				{
+					eLedState = SHIFT_LEFT;
+				}
+				else if(BUTTON_2 == eKeyboardRead())
 				{
 					eLedState = SHIFT_RIGHT;
 				}
@@ -29,7 +33,7 @@ int main()
 				break;
 			
 			case SHIFT_RIGHT:
-				if(BUTTON_0 == eKeyboardRead())
+				if(BUTTON_1 == eKeyboardRead())
 				{
 					eLedState = STOP;
 				}
@@ -37,6 +41,18 @@ int main()
 				{
 					LedStepRight();
 					eLedState = SHIFT_RIGHT;
+				}
+				break;
+				
+			case SHIFT_LEFT:
+				if(BUTTON_1 == eKeyboardRead())
+				{
+					eLedState = STOP;
+				}
+				else
+				{
+					LedStepLeft();
+					eLedState = SHIFT_LEFT;
 				}
 				break;
 			
