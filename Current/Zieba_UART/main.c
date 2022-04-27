@@ -12,7 +12,7 @@ int main()
 
 	while(1)
 	{
-/*		switch(eKeyboardRead())
+		switch(eKeyboardRead())
 		{
 			case BUTTON_0:
 				ServoCallib();
@@ -32,7 +32,8 @@ int main()
 	
 			default:
 				break;
-		}                      */
+		}                      
+
 	}
 }
 /*******************************************/
