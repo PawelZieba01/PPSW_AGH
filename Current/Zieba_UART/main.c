@@ -1,18 +1,45 @@
 #include "keyboard.h"
 #include "servo.h"
 #include "uart.h"
+#include "led.h"
 
 
 /*******************************************/
 int main()
 {
 	UART_InitWithInt(9600);
+	LedInit();
 	KeyboardInit();
 	ServoInit(50);
 
 	while(1)
 	{
-		switch(eKeyboardRead())
+		switch(cOdebranyZnak)
+		{
+			case '1':
+				LedOn(0);
+				break;
+			
+			case '2':
+				LedOn(1);
+				break;
+			
+			case '3':
+				LedOn(2);
+				break;
+			
+			case '4':
+				LedOn(3);
+				break;
+			
+			case 'c':
+				LedOn(4);
+			
+			default:
+				break;
+		}
+		
+/*		switch(eKeyboardRead())
 		{
 			case BUTTON_0:
 				ServoCallib();
@@ -32,7 +59,7 @@ int main()
 	
 			default:
 				break;
-		}                      
+		}           */           
 
 	}
 }
