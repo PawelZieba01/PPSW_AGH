@@ -22,16 +22,16 @@ void (*ptrTimer0InterruptFunction)(void);
 
 /**********************************************/
 //(Interrupt Service Routine) of Timer 0 interrupt
-__irq void Timer0IRQHandler(){
-
+__irq void Timer0IRQHandler()
+{
 	T0IR=mMR0_INTERRUPT; 					// skasowanie flagi przerwania 
 	ptrTimer0InterruptFunction();			// cos do roboty
 	VICVectAddr=0x00; 						// potwierdzenie wykonania procedury obslugi przerwania
 }
 
 /**********************************************/
-void Timer0Interrupts_Init(unsigned int uiPeriod, void (*ptrInterruptFunction)(void)){ // microseconds
-	
+void Timer0Interrupts_Init(unsigned int uiPeriod, void (*ptrInterruptFunction)(void))		// microseconds
+{ 
 	ptrTimer0InterruptFunction = ptrInterruptFunction;
 
         // interrupts
