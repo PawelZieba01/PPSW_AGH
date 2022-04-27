@@ -6,9 +6,17 @@
 #define DETECTOR_PIN (1<<10)
 
 enum DetectorState {ACTIVE, INACTIVE};
+enum ServoState {CALLIB, IDLE, IN_PROGRESS};
 
-enum LedState {STOP, SHIFT_RIGHT, SHIFT_LEFT, CALLIB};
-enum LedState eLedState = CALLIB;
+struct Servo
+{
+	enum ServoState eState; 
+	unsigned int uiCurrentPosition;
+	unsigned int uiDesiredPosition;
+}; 
+
+struct Servo sServo;
+
 
 void DetectorInit(void);
 enum DetectorState eReadDetector(void);
@@ -17,8 +25,6 @@ void Automat(void);
 /*******************************************/
 int main()
 {
-	unsigned int iMainLoopCtr;
-	
 	LedInit();
 	KeyboardInit();
 	DetectorInit();
@@ -26,7 +32,27 @@ int main()
 
 	while(1)
 	{
-	 	iMainLoopCtr++;
+		switch(eKeyboardRead())
+		{
+			case BUTTON_0:
+				sServo.eState = CALLIB;
+				break;
+			
+			case BUTTON_1:
+				sServo.uiDesiredPosition = 12;
+				break;
+			
+			case BUTTON_2:
+				sServo.uiDesiredPosition = 24;
+				break;
+			
+			case BUTTON_3:
+				sServo.uiDesiredPosition = 36;
+				break;
+	
+			default:
+				break;
+		}
 	}
 }
 /*******************************************/
@@ -34,56 +60,49 @@ int main()
 
 void Automat(void)
 {
-	switch(eLedState)
+	switch(sServo.eState)
 	{
-		case STOP:
-			if(BUTTON_0 == eKeyboardRead())
+		case IDLE:
+			if(sServo.uiCurrentPosition != sServo.uiDesiredPosition)
 			{
-				eLedState = SHIFT_LEFT;
-			}
-			else if(BUTTON_2 == eKeyboardRead())
-			{
-				eLedState = SHIFT_RIGHT;
+				sServo.eState = IN_PROGRESS;
 			}
 			else
 			{
-				eLedState = STOP;
+				sServo.eState = IDLE;
 			}
 			break;
 		
-		case SHIFT_RIGHT:
-			if(BUTTON_1 == eKeyboardRead())
-			{
-				eLedState = STOP;
-			}
-			else
+		case IN_PROGRESS:
+			if(sServo.uiCurrentPosition < sServo.uiDesiredPosition)
 			{
 				LedStepRight();
-				eLedState = SHIFT_RIGHT;
+				sServo.uiCurrentPosition++;
+				sServo.eState = IN_PROGRESS;
 			}
-			break;
-			
-		case SHIFT_LEFT:
-			if(BUTTON_1 == eKeyboardRead())
+			else if(sServo.uiCurrentPosition > sServo.uiDesiredPosition)
 			{
-				eLedState = STOP;
+				LedStepLeft();
+				sServo.uiCurrentPosition--;
+				sServo.eState = IN_PROGRESS;
 			}
 			else
 			{
-				LedStepLeft();
-				eLedState = SHIFT_LEFT;
+				sServo.eState = IDLE;
 			}
 			break;
 		
 		case CALLIB:
 			if(ACTIVE == eReadDetector())
 			{
-				eLedState = STOP;
+				sServo.uiCurrentPosition = 0;
+				sServo.uiDesiredPosition = 0;
+				sServo.eState = IDLE;
 			}
 			else
 			{
 				LedStepLeft();
-				eLedState = CALLIB;
+				sServo.eState = CALLIB;
 			}
 			break;
 		
