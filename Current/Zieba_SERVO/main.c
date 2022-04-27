@@ -21,33 +21,34 @@ struct Servo sServo;
 void DetectorInit(void);
 enum DetectorState eReadDetector(void);
 void Automat(void);
+void ServoInit(unsigned int uiServoFrequency);
+void ServoCallib(void);
+void ServoGoTo(unsigned int uiPosition);
 
 /*******************************************/
 int main()
 {
-	LedInit();
 	KeyboardInit();
-	DetectorInit();
-	Timer0Interrupts_Init(20000, &Automat);
+	ServoInit(50);
 
 	while(1)
 	{
 		switch(eKeyboardRead())
 		{
 			case BUTTON_0:
-				sServo.eState = CALLIB;
+				ServoCallib();
 				break;
 			
 			case BUTTON_1:
-				sServo.uiDesiredPosition = 12;
+				ServoGoTo(12);
 				break;
 			
 			case BUTTON_2:
-				sServo.uiDesiredPosition = 24;
+				ServoGoTo(24);
 				break;
 			
 			case BUTTON_3:
-				sServo.uiDesiredPosition = 36;
+				ServoGoTo(36);
 				break;
 	
 			default:
@@ -128,4 +129,25 @@ enum DetectorState eReadDetector(void)
 	{
 		return INACTIVE;
 	}
+}
+
+
+void ServoInit(unsigned int uiServoFrequency)
+{
+	LedInit();
+	DetectorInit();
+	sServo.eState = CALLIB;
+	Timer0Interrupts_Init(1000000/uiServoFrequency, &Automat);
+}
+
+
+void ServoCallib(void)
+{
+	sServo.eState = CALLIB;
+}
+
+
+void ServoGoTo(unsigned int uiPosition)
+{
+	sServo.uiDesiredPosition = uiPosition;
 }
