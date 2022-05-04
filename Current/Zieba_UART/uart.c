@@ -1,7 +1,8 @@
 #include <LPC210X.H>
-#include "strings.h"
 #include "uart.h"
+#include "strings.h"
 
+#define TERMINATOR '\r'
 
 
 /************ UART ************/
@@ -30,10 +31,44 @@
 #define mIRQ_SLOT_ENABLE                           0x00000020
 
 ////////////// Zmienne globalne ////////////
-char cOdebranyZnak;
 
+//char cOdebranyZnak;
 struct RecieverBuffer sRxBuffer;
 
+
+///////////////////////////////////////////
+void Reciever_PutCharacterToBuffer(char cCharacter)
+{
+	if(sRxBuffer.ucCharCtr >= RECIEVER_SIZE)
+	{
+		sRxBuffer.eStatus = OVERFLOW;
+	}
+	else if(cCharacter == TERMINATOR)
+	{
+		sRxBuffer.cData[sRxBuffer.ucCharCtr] = NULL;
+		sRxBuffer.ucCharCtr = 0;
+		sRxBuffer.eStatus = READY;
+	}
+	else
+	{
+		sRxBuffer.cData[sRxBuffer.ucCharCtr] = cCharacter;
+		sRxBuffer.ucCharCtr++;
+		sRxBuffer.eStatus = EMPTY;
+	}
+	
+}
+
+///////////////////////////////////////////
+enum eRecieverStatus eReciever_GetStatus(void)
+{
+	return sRxBuffer.eStatus;
+}
+
+///////////////////////////////////////////
+void Reciever_GetStringCopy(char * DestinationBuffer)
+{
+	CopyString(sRxBuffer.cData, DestinationBuffer);
+}
 
 ///////////////////////////////////////////
 __irq void UART0_Interrupt (void) {
@@ -43,7 +78,8 @@ __irq void UART0_Interrupt (void) {
 
    if((uiCopyOfU0IIR & mINTERRUPT_PENDING_IDETIFICATION_BITFIELD) == mRX_DATA_AVALIABLE_INTERRUPT_PENDING) // odebrano znak
    {
-      cOdebranyZnak = U0RBR;
+      //cOdebranyZnak = U0RBR;
+	   Reciever_PutCharacterToBuffer(U0RBR);
    } 
    
    if((uiCopyOfU0IIR & mINTERRUPT_PENDING_IDETIFICATION_BITFIELD) == mTHRE_INTERRUPT_PENDING)              // wyslano znak - nadajnik pusty 
@@ -70,24 +106,3 @@ void UART_InitWithInt(unsigned int uiBaudRate){
    VICIntEnable |= (0x1 << VIC_UART0_CHANNEL_NR);               // Enable UART 0 Interrupt Channel
 }
 
-
-void Reciever_PutCharacterToBuffer(char cCharacter)
-{
-	if(sRxBuffer.ucCharCtr >= RECIEVER_SIZE)
-	{
-		sRxBuffer.eStatus = OVERFLOW;
-	}
-	else if(cCharacter == TERMINATOR)
-	{
-		sRxBuffer.cData[sRxBuffer.ucCharCtr] = NULL;
-		sRxBuffer.ucCharCtr = 0;
-		sRxBuffer.eStatus = READY;
-	}
-	else
-	{
-		sRxBuffer.cData[sRxBuffer.ucCharCtr] = cCharacter;
-		sRxBuffer.ucCharCtr++;
-		sRxBuffer.eStatus = EMPTY;
-	}
-	
-}

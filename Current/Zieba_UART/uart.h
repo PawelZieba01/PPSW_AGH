@@ -1,7 +1,5 @@
-#define RECIEVER_SIZE 4
-#define TERMINATOR '\0'
-
-extern char cOdebranyZnak;
+#define RECIEVER_SIZE 16
+//extern char cOdebranyZnak;
 
 enum eRecieverStatus {EMPTY, READY, OVERFLOW};
 
@@ -14,4 +12,6 @@ struct RecieverBuffer
 };
 
 void UART_InitWithInt(unsigned int uiBaudRate);
-void Reciever_PutCharacterToBuffer(char cCharacter);
+enum eRecieverStatus eReciever_GetStatus(void);
+void Reciever_GetStringCopy(char * DestinationBuffer);
+
