@@ -1,4 +1,4 @@
-#define RECIEVER_SIZE 16
+#define RECIEVER_SIZE 64
 //extern char cOdebranyZnak;
 
 enum eRecieverStatus {EMPTY, READY, OVERFLOW};

@@ -1,6 +1,6 @@
 #include <LPC210X.H>
 #include "uart.h"
-#include "strings.h"
+#include "string.h"
 
 #define TERMINATOR '\r'
 

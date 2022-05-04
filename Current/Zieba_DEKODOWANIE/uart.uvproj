@@ -428,9 +428,14 @@
               <FilePath>.\servo.c</FilePath>
             </File>
             <File>
-              <FileName>strings.c</FileName>
+              <FileName>string.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\strings.c</FilePath>
+              <FilePath>.\string.c</FilePath>
+            </File>
+            <File>
+              <FileName>command_decoder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\command_decoder.c</FilePath>
             </File>
           </Files>
         </Group>
