@@ -427,6 +427,11 @@
               <FileType>1</FileType>
               <FilePath>.\servo.c</FilePath>
             </File>
+            <File>
+              <FileName>strings.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\strings.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

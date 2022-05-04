@@ -1,5 +1,8 @@
 #include <LPC210X.H>
+#include "strings.h"
 #include "uart.h"
+
+
 
 /************ UART ************/
 // U0LCR Line Control Register
@@ -28,6 +31,8 @@
 
 ////////////// Zmienne globalne ////////////
 char cOdebranyZnak;
+
+struct RecieverBuffer sRxBuffer;
 
 
 ///////////////////////////////////////////
@@ -63,4 +68,26 @@ void UART_InitWithInt(unsigned int uiBaudRate){
    VICVectAddr1  = (unsigned long) UART0_Interrupt;             // set interrupt service routine address
    VICVectCntl1  = mIRQ_SLOT_ENABLE | VIC_UART0_CHANNEL_NR;     // use it for UART 0 Interrupt
    VICIntEnable |= (0x1 << VIC_UART0_CHANNEL_NR);               // Enable UART 0 Interrupt Channel
+}
+
+
+void Reciever_PutCharacterToBuffer(char cCharacter)
+{
+	if(sRxBuffer.ucCharCtr >= RECIEVER_SIZE)
+	{
+		sRxBuffer.eStatus = OVERFLOW;
+	}
+	else if(cCharacter == TERMINATOR)
+	{
+		sRxBuffer.cData[sRxBuffer.ucCharCtr] = NULL;
+		sRxBuffer.ucCharCtr = 0;
+		sRxBuffer.eStatus = READY;
+	}
+	else
+	{
+		sRxBuffer.cData[sRxBuffer.ucCharCtr] = cCharacter;
+		sRxBuffer.ucCharCtr++;
+		sRxBuffer.eStatus = EMPTY;
+	}
+	
 }
