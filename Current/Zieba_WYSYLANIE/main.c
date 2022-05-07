@@ -8,14 +8,23 @@ void Delay(unsigned int uiDelayMilliseconds);
 /*******************************************/
 int main()
 {	
+	unsigned int uiCounter = 0;
+	char acStringToSend[15]; 
+	
 	UART_InitWithInt(9600);
 	
 	while(1)
 	{
 		if(FREE == eTransmiter_GetStatus())
 		{
-			Transmiter_SendString("test123\n\r");
+			CopyString("licznik ", acStringToSend);
+			AppendUIntToString(uiCounter, acStringToSend);
+			
+			Transmiter_SendString(acStringToSend);
+			uiCounter++;
 		}
+		
+		Delay(200);
 	}
 }
 /*******************************************/
