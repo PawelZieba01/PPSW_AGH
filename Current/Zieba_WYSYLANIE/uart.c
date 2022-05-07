@@ -38,7 +38,7 @@ struct RecieverBuffer sRxBuffer;
 struct TransmiterBuffer sTxBuffer;
 
 ///////////////////////////////////////////
-enum eTransmiterStatus Transmiter_GetStatus(void)
+enum eTransmiterStatus eTransmiter_GetStatus(void)
 {
 	return sTxBuffer.eStatus;
 }

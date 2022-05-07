@@ -10,9 +10,13 @@ int main()
 {	
 	UART_InitWithInt(9600);
 	
-	Transmiter_SendString("test123");
-		
-	return 0;
+	while(1)
+	{
+		if(FREE == eTransmiter_GetStatus())
+		{
+			Transmiter_SendString("test123\n\r");
+		}
+	}
 }
 /*******************************************/
 
