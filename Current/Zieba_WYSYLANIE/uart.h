@@ -22,6 +22,9 @@ struct TransmiterBuffer
 
 
 void UART_InitWithInt(unsigned int uiBaudRate);
+
+void Reciever_GetStringCopy(char * DestinationBuffer);
 enum eRecieverStatus eReciever_GetStatus(void);
+
 void Transmiter_SendString(char cString[]);
 enum eTransmiterStatus eTransmiter_GetStatus(void);

@@ -1,10 +1,10 @@
 #define DELIMITER_CHAR ' '
 #define MAX_TOKEN_NR 2
 #define MAX_KEYWORD_STRING_LTH 10
-#define MAX_KEYWORD_NR 2
+#define MAX_KEYWORD_NR 1
 
 enum TokenType {KEYWORD, NUMBER, STRING};
-enum KeywordCode {CAL, GT};
+enum KeywordCode {CALC};
 enum MsgState{TOKEN, DELIMITER};
 
 struct Keyword

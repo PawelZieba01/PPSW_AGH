@@ -30,6 +30,8 @@ __irq void Timer0IRQHandler()
 }
 
 /**********************************************/
+
+
 void Timer0Interrupts_Init(unsigned int uiPeriod, void (*ptrInterruptFunction)(void))		// microseconds
 { 
 	ptrTimer0InterruptFunction = ptrInterruptFunction;
@@ -42,8 +44,8 @@ void Timer0Interrupts_Init(unsigned int uiPeriod, void (*ptrInterruptFunction)(v
 
         // match module
 
-	T0MR0 = 15 * uiPeriod;                 	     			 	// value 
-	T0MCR |= (mINTERRUPT_ON_MR0 | mRESET_ON_MR0); 				// action 
+	T0MR0 = 15 * uiPeriod;                 	     			 		// value 
+	T0MCR |= (mINTERRUPT_ON_MR0 | mRESET_ON_MR0); 					// action 
 
         // timer
 

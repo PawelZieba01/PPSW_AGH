@@ -105,6 +105,7 @@ enum eRecieverStatus eReciever_GetStatus(void)
 ///////////////////////////////////////////
 void Reciever_GetStringCopy(char * DestinationBuffer)
 {
+	sRxBuffer.eStatus = EMPTY;
 	CopyString(sRxBuffer.cData, DestinationBuffer);
 }
 

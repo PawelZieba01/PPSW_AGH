@@ -1,6 +1,7 @@
 #include "timer_interrupts.h"
 #include "uart.h"
 #include "string.h"
+#include "command_decoder.h"
 
 void WatchUpdate(void);
 
@@ -17,16 +18,46 @@ struct Watch sWatch;
 /*******************************************/
 int main()
 {	
-	char acStringToSend[15]; 
+	unsigned char fCalcCommandRecieved = 0;
+	unsigned int uiCalcValue;
+	
+	char acStringToSend[16]; 
+	char acRecievedString[16];
 	
 	UART_InitWithInt(9600);
 	Timer0Interrupts_Init(1000000, &WatchUpdate);
 	
 	while(1)
 	{
+		if(READY == eReciever_GetStatus())
+		{
+			Reciever_GetStringCopy(acRecievedString);
+			
+			DecodeMsg(acRecievedString);
+			
+			if((ucTokenNr == 2) && (KEYWORD == asToken[0].eType) && (NUMBER == asToken[1].eType))
+			{
+				if(CALC == asToken[0].uValue.eKeyword)
+				{
+					fCalcCommandRecieved = 1;
+					uiCalcValue = asToken[1].uValue.uiNumber * 2;
+				}
+			}
+		}
+
+		
 		if(FREE == eTransmiter_GetStatus())
 		{
-			if(1 == sWatch.fSeccondsValueChanged)
+			if (1 == fCalcCommandRecieved)
+			{
+				CopyString("calc ", acStringToSend);
+				AppendUIntToString(uiCalcValue, acStringToSend);
+				fCalcCommandRecieved = 0;
+				
+				AppendString("\n\r", acStringToSend);
+				Transmiter_SendString(acStringToSend);
+			}
+			else if(1 == sWatch.fSeccondsValueChanged)
 			{
 				CopyString("sec ", acStringToSend);
 				AppendUIntToString(sWatch.ucSecconds, acStringToSend);
