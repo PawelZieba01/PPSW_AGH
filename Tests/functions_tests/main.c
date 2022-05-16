@@ -135,6 +135,7 @@ void TestOf_ReplaceCharactersInString(void)
     //Zastapienie spacji nullem
     ReplaceCharactersInString(acResultString, ' ', NULL);
     if(EQUAL == eCompareString(acResultString, "jOdOn")) printf("OK\n\n\n"); else printf("Error\n\n\n");
+
 }
 
 
