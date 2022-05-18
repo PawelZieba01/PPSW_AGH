@@ -59,10 +59,14 @@ int main()
 	
 	LedInit();
 	KeyboardInit();
-	Timer0Interrupts_Init(20000, &Automat);
+	Timer0Interrupts_Init(250000, &Automat);
 
 	while(1)
 	{
 	 	iMainLoopCtr++;
+		iMainLoopCtr++;
+		iMainLoopCtr++;
+		iMainLoopCtr++;
+		iMainLoopCtr++;
 	}
 }
