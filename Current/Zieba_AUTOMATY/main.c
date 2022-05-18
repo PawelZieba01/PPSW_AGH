@@ -2,13 +2,16 @@
 #include "keyboard.h"
 
 void Delay(unsigned int uiDelayMilliseconds);
-
+extern void LedOn(unsigned char ucLedIndeks);
 
 
 int main()
 {
-	enum LedState {STOP, SHIFT_RIGHT, SHIFT_LEFT};
+	enum LedState {STOP, SHIFT_RIGHT, SHIFT_LEFT, BLINK};
 	enum LedState eLedState = SHIFT_RIGHT;
+
+	unsigned char ucBlinkCounter = 0;
+	unsigned char fBlinkLedState = 0;
 
 	LedInit();
 
@@ -45,7 +48,11 @@ int main()
 				break;
 				
 			case SHIFT_LEFT:
-				if(BUTTON_1 == eKeyboardRead())
+				if(BUTTON_3 == eKeyboardRead())
+				{
+					eLedState = BLINK;
+				}
+				else if(BUTTON_1 == eKeyboardRead())
 				{
 					eLedState = STOP;
 				}
@@ -56,6 +63,29 @@ int main()
 				}
 				break;
 			
+			case BLINK:
+				if(ucBlinkCounter > 10)
+				{
+					ucBlinkCounter = 0;
+					eLedState = SHIFT_RIGHT;
+				}
+				else
+				{
+					if(0 == fBlinkLedState)
+					{
+						LedOn(1);
+						fBlinkLedState = 1;
+					}
+					else
+					{
+						LedOn(4); 
+						fBlinkLedState = 0;
+					}
+					
+					ucBlinkCounter++;
+					eLedState = BLINK;
+				}
+				
 			default:
 				break;
 		}
