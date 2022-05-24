@@ -4,9 +4,10 @@
 #include "timer_interrupts.h"
 
 #define DETECTOR_PIN (1<<10)
+#define SERVO_OFFSET 12
 
 enum DetectorState {ACTIVE, INACTIVE};
-enum ServoState {CALLIB, IDLE, IN_PROGRESS};
+enum ServoState {CALLIB, IDLE, IN_PROGRESS, SHIFT_OFFSET};
 
 struct Servo
 {
@@ -25,6 +26,8 @@ void Automat(void);
 
 void Automat(void)
 {
+	static unsigned char ucShiftCounter = 0;
+	
 	switch(sServo.eState)
 	{
 		case IDLE:
@@ -62,12 +65,26 @@ void Automat(void)
 			{
 				sServo.uiCurrentPosition = 0;
 				sServo.uiDesiredPosition = 0;
-				sServo.eState = IDLE;
+				sServo.eState = SHIFT_OFFSET;
 			}
 			else
 			{
 				LedStepLeft();
 				sServo.eState = CALLIB;
+			}
+			break;
+			
+		case SHIFT_OFFSET:
+			if(ucShiftCounter < SERVO_OFFSET)
+			{
+				LedStepRight();
+				ucShiftCounter++;
+				sServo.eState = SHIFT_OFFSET;
+			}
+			else
+			{
+				ucShiftCounter = 0;
+				sServo.eState = IDLE;
 			}
 			break;
 		
