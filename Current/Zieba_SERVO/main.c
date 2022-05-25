@@ -7,6 +7,9 @@ int main()
 {
 	KeyboardInit();
 	ServoInit(50);
+	
+	ServoGoTo(12);
+	ServoGoTo(6);
 
 	while(1)
 	{

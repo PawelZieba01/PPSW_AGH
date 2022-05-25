@@ -131,4 +131,6 @@ void ServoCallib(void)
 void ServoGoTo(unsigned int uiPosition)
 {
 	sServo.uiDesiredPosition = uiPosition;
-}
+	
+	while(sServo.eState == IN_PROGRESS){}  	//to i tak nie zadziala bo mamy tylko 50hz przerwanie xD - ale przyjal
+}											// zeby dzialalo to trzeba porownac wartosc zadana i obecna pozycje bezposrednio
