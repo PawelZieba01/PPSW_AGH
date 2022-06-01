@@ -115,3 +115,8 @@ void ServoGoTo(unsigned int uiPosition)
 {
 	sServo.uiDesiredPosition = uiPosition;
 }
+
+void ServoShift(unsigned int uiShiftSteps)
+{
+	sServo.uiDesiredPosition += uiShiftSteps;
+}

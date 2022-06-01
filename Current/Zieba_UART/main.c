@@ -10,7 +10,7 @@ void Delay(unsigned int uiDelayMilliseconds);
 /*******************************************/
 int main()
 {
-	unsigned int uiServoPosition = 0;
+	//unsigned int uiServoPosition = 0;
 	
 	UART_InitWithInt(9600);
 	//KeyboardInit();
@@ -23,14 +23,13 @@ int main()
 		switch(cOdebranyZnak)
 		{
 			case '1':
-				uiServoPosition = uiServoPosition + 12;
-				ServoGoTo(uiServoPosition);
+				ServoShift(12);
 				cOdebranyZnak = NULL;
 				break;
 			
 			case 'c':
 				ServoCallib();
-				uiServoPosition = 0;
+				//uiServoPosition = 0;
 				cOdebranyZnak = NULL;	//albo tutaj trzeba wpisac nulla albo u gory odkomentowac delaya
 			
 			default:
