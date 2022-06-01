@@ -62,16 +62,19 @@ char cTransmiter_GetCharacterFromBuffer()
 		sTxBuffer.fLastCharacter = 0;
 		sTxBuffer.cCharCtr = 0;
 		sTxBuffer.eStatus = FREE;
-		return TERMINATOR;
-	}
-	else if((NULL == cCurrentChar) || (TRANSMITER_SIZE == sTxBuffer.cCharCtr))
-	{
-		sTxBuffer.fLastCharacter = 1;
 		return NULL;
 	}
+	else if((NULL == cCurrentChar))
+	{
+		sTxBuffer.fLastCharacter = 1;
+		return TERMINATOR;
+	}
+	else
+	{
+		sTxBuffer.cCharCtr++;
+		return cCurrentChar;
+	}
 	
-	sTxBuffer.cCharCtr++;
-	return cCurrentChar;
 }
 
 ///////////////////////////////////////////
@@ -122,9 +125,10 @@ __irq void UART0_Interrupt (void) {
    
 	if((uiCopyOfU0IIR & mINTERRUPT_PENDING_IDETIFICATION_BITFIELD) == mTHRE_INTERRUPT_PENDING)              // wyslano znak - nadajnik pusty 
 	{
-		if(BUSY == sTxBuffer.eStatus)
+		unsigned char ucCharacterToSend = cTransmiter_GetCharacterFromBuffer();
+		if(NULL != ucCharacterToSend)
 		{
-			U0THR = cTransmiter_GetCharacterFromBuffer();
+			U0THR = ucCharacterToSend;
 		}
 	}
 

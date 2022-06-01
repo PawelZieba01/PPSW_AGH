@@ -8,7 +8,10 @@ struct Token asToken[MAX_TOKEN_NR];								// TABLICA Z TOKENAMI
 
 struct Keyword asKeywordList[MAX_KEYWORD_NR] = 
 {
-	{CALC, "calc"}
+	{CALC, "calc"},
+	{ID, "id"},
+	{GOTO, "goto"},
+	{CALLIB, "callib"}
 };
 
 unsigned char ucFindTokensInString(char *pcString)

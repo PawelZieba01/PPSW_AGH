@@ -1,5 +1,5 @@
 #include <LPC21xx.H>
-#include "timer_interrupts.h"
+#include "timer0_interrupts.h"
 
 // TIMER
 #define mCOUNTER_ENABLE 0x00000001
@@ -39,8 +39,8 @@ void Timer0Interrupts_Init(unsigned int uiPeriod, void (*ptrInterruptFunction)(v
         // interrupts
 
 	VICIntEnable |= (0x1 << VIC_TIMER0_CHANNEL_NR);            		// Enable Timer 0 interrupt channel 
-	VICVectCntl2  = mIRQ_SLOT_ENABLE | VIC_TIMER0_CHANNEL_NR;  		// Enable Slot 0 and assign it to Timer 0 interrupt channel
-	VICVectAddr2  =(unsigned long)Timer0IRQHandler; 	   			// Set to Slot 0 Address of Interrupt Service Routine 
+	VICVectCntl3  = mIRQ_SLOT_ENABLE | VIC_TIMER0_CHANNEL_NR;  		// Enable Slot 0 and assign it to Timer 0 interrupt channel
+	VICVectAddr3  =(unsigned long)Timer0IRQHandler; 	   			// Set to Slot 0 Address of Interrupt Service Routine 
 
         // match module
 
@@ -52,3 +52,5 @@ void Timer0Interrupts_Init(unsigned int uiPeriod, void (*ptrInterruptFunction)(v
 	T0TCR |=  mCOUNTER_ENABLE; // start 
 
 }
+
+//trzeba dolozyc serwo - przerobic zegarek na timer 1
