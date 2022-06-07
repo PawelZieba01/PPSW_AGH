@@ -16,8 +16,9 @@ void WaitOnTimer(unsigned int iDelayTime)
 {
 	unsigned int uiStopValue = iDelayTime * 15;
 	
-	T0TCR &= ~COUNTER_RESET_BIT;
 	T0TCR |= COUNTER_RESET_BIT;
+	T0TCR &= ~COUNTER_RESET_BIT;
+	
 	while(T0TC < uiStopValue){}
 	
 }
