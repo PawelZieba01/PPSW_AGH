@@ -6,6 +6,7 @@
 #define ADC_PDN_BIT 		(1<<21)
 #define ADC_CONV_DONE_BIT 	(1<<31)
 #define ADC_CONV_DATA		0x0000FFC0
+#define ADC_START_CONV 		(1<<24)
 
 
 
@@ -20,6 +21,7 @@ void ADCInit(void)
 
 unsigned int ADCStartConversion(void)
 {
+	ADCR |= ADC_START_CONV;						//start conversion
 	while((ADDR & ADC_CONV_DONE_BIT) == 0){}
 	return ((ADDR & ADC_CONV_DATA) >> 6);
 }
