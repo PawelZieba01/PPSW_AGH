@@ -53,4 +53,3 @@ void Timer0Interrupts_Init(unsigned int uiPeriod, void (*ptrInterruptFunction)(v
 
 }
 
-//trzeba dolozyc serwo - przerobic zegarek na timer 1

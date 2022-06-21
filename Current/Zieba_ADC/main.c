@@ -13,7 +13,7 @@ int main()
 	unsigned int uiPotValue = 0;
 	unsigned int uiServoPotPosition = 0;
 	
-	ServoInit(50);
+	ServoInit(200);
 	UART_InitWithInt(9600);
 	ADCInit();
 
@@ -23,9 +23,6 @@ int main()
 		uiServoPotPosition = MapRange(0, 1023, 0, 35, uiPotValue);
 		
 		ServoGoTo(uiServoPotPosition);
-		
-		
-		
 		
 		CopyString("ADC: ", acBuffToSend);
 		AppendUIntToString(uiPotValue , acBuffToSend);
